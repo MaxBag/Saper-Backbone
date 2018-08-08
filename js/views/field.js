@@ -35,6 +35,7 @@ app.Field = Backbone.View.extend({
 
   createField : function() {
     this.$el.empty();
+    this.$el.removeClass('game-over-blur');
     for(var i=0; i < this.count; i++) {
       var cell = $('<div class=cell></div>');
       cell.attr('data-cell', i);
@@ -299,15 +300,15 @@ app.Field = Backbone.View.extend({
     function openAllCells() {
       that.children.each(function(){
         if($(this).html() == '0') {$(this).html('');}
-        $(this).addClass('is-opened').removeClass('markMine');
+        $(this).addClass('is-opened').removeClass('markMine').css('opacity', 0.25);
       });
 
     }
 
     if(target.hasClass('is-mine') && !target.hasClass('is-opened')) {
-      alert('game over');
       openAllCells();
       Backbone.trigger('gameOver');
+      $(this.el).addClass('game-over-blur');
     }else if(target.html() !== '0') {
       if(!target.hasClass('is-opened')) {
         target.addClass('is-opened').removeClass('markMine');
@@ -319,7 +320,7 @@ app.Field = Backbone.View.extend({
   },
 
   markMine : function (e) {
-    this.trigger('tt');
+    //this.trigger('tt');
     var target = $(e.target);
     e.preventDefault();
     if(!target.hasClass('is-opened')) {
